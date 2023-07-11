@@ -2,6 +2,7 @@ package com.chatapplication.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.chatapplication.dto.authentication.AuthenticationRequest;
 import com.chatapplication.dto.authentication.AuthenticationResponse;
 import com.chatapplication.service.user.AuthService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/authenticate")
@@ -28,5 +31,11 @@ public class UserAuthenticationController {
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
+    }
+
+    @GetMapping("/token-authentication")
+    public ResponseEntity<AuthenticationResponse> tokenAuthentication(
+            HttpServletRequest request) {
+        return ResponseEntity.ok(authService.tokenAuthenticate(request));
     }
 }
