@@ -2,6 +2,7 @@ package com.chatapplication.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,8 +23,13 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(length = 4000)
     private String text;
-    private Integer userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User sender;
 
     @ManyToOne
     @JoinColumn(name = "conversation_id")

@@ -33,7 +33,7 @@ public class UserAuthenticationController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
-    @GetMapping("/token-authentication")
+    @PostMapping("/token-authentication")
     public ResponseEntity<AuthenticationResponse> tokenAuthentication(
             HttpServletRequest request) {
         return ResponseEntity.ok(authService.tokenAuthenticate(request));

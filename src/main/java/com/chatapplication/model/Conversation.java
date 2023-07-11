@@ -24,8 +24,8 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer userOneId;
-    private Integer userTwoId;
+    private String username1;
+    private String username2;
 
     @OneToMany(mappedBy = "conversation")
     @JsonManagedReference
