@@ -31,14 +31,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponse register(AuthenticationRequest authenticationRequest) {
-        User user = User.builder()
+
+        User user = userRepository.findFirstByUsername(authenticationRequest.getUsername());
+        if (user != null) {
+            throw new UsernameNotFoundException("User is already exist");
+        }
+
+        User newUser = User.builder()
                 .username(authenticationRequest.getUsername())
-                .password(authenticationRequest.getPassword())
+                .password(passwordEncoder.encode(authenticationRequest.getPassword()))
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(newUser);
 
-        String token = jwtUtils.generateToken(user.getUsername());
+        String token = jwtUtils.generateToken(newUser.getUsername());
         return AuthenticationResponse.builder().token(token).build();
     }
 
