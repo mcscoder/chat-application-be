@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chatapplication.dto.chat.AddChatSessionRequest;
 import com.chatapplication.dto.chat.ChatSessionDTO;
 import com.chatapplication.dto.chat.GetConversationRequest;
 import com.chatapplication.dto.chat.MessageDTO;
@@ -91,5 +93,46 @@ public class UserController {
         }
 
         return messageDTOs;
+    }
+
+    @PostMapping("/add-chat-session")
+    public ChatSessionDTO addChatSession(
+            HttpServletRequest request,
+            @RequestBody AddChatSessionRequest addChatSessionRequest) {
+
+        String username1 = jwtUtils.extractUsername(request);
+        String username2 = addChatSessionRequest.getNewUsername();
+
+        Conversation conversation = Conversation.builder()
+                .username1(username1)
+                .username2(username2)
+                .build();
+
+        Conversation newConversation = conversationRepository.save(conversation);
+
+        User user1 = userRepository.findFirstByUsername(username1);
+        User user2 = userRepository.findFirstByUsername(username2);
+        if (user2 == null) {
+            throw new UsernameNotFoundException("User is not exist");
+        }
+
+        ChatSession chatSession1 = ChatSession.builder()
+                .conversation(newConversation)
+                .user(user1)
+                .build();
+        chatSessionRepository.save(chatSession1);
+
+        ChatSession chatSession2 = ChatSession.builder()
+                .conversation(newConversation)
+                .user(user2)
+                .build();
+        chatSessionRepository.save(chatSession2);
+
+        ChatSessionDTO chatSessionDTO = ChatSessionDTO.builder()
+                .senderUsername(username1)
+                .recipientUsername(username2)
+                .conversationId(newConversation.getId())
+                .build();
+        return chatSessionDTO;
     }
 }

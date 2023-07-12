@@ -28,7 +28,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/authenticate/**", "/api/v2/**", "/api/v1/**").permitAll()
+                .requestMatchers("/authenticate/**", "/api/v1/**", "/ws/**", "/app/**", "/user/**").permitAll()
                 // .and()
                 // .authorizeHttpRequests()
                 // .requestMatchers("/api/v1/**").authenticated()

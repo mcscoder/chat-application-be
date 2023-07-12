@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDTO {
-    private String text;
+public class WebsocketMessageRequest {
     private String senderUsername;
     private String recipientUsername;
+    private String text;
+    private int conversationId;
 }

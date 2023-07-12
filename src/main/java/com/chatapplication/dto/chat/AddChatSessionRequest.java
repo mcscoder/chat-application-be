@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDTO {
-    private String text;
-    private String senderUsername;
-    private String recipientUsername;
+public class AddChatSessionRequest {
+    private String newUsername;
 }
